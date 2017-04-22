@@ -31,6 +31,28 @@ class Users extends CI_Controller
         }
     }
 
+    public function login()
+    {
+        $data['title'] = 'Sign In';
+
+        $this->form_validation->set_rules('username', 'Username', 'required|callback_check_username_exists');
+        $this->form_validation->set_rules('password', 'Password', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('templates/header');
+            $this->load->view('users/login', $data);
+            $this->load->view('templates/footer');
+        } else {
+            //Get Username
+            $username = $this->input->post('username');
+
+            //Set Message
+            $this->session->set_flashdata('user_loggedin', 'You are now logged in');
+
+            redirect('posts');
+        }
+    }
+
     //Check if username exists
     public function check_username_exists($username)
     {
